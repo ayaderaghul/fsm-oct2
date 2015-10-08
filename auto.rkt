@@ -39,9 +39,9 @@
           [(= an-event 2) (state-result2 result-state)])))
 
 (define (react an-event an-auto)
-(state-name
-(list-ref (automaton-states an-auto)
-(jump-to-state an-event an-auto))))
+  (state-name
+   (list-ref (automaton-states an-auto)
+             (jump-to-state an-event an-auto))))
 
 (define (update old-auto new-state)
   (struct-copy automaton old-auto [current-state new-state]))
@@ -49,12 +49,18 @@
 ; generate random automaton (random current state, random result-state
 ; after each event
 (define (generate-auto)
-  (automaton (random 5)
-             (list (state (random 3) (random 5) (random 5) (random 5))
-                   (state (random 3) (random 5) (random 5) (random 5))
-                   (state (random 3) (random 5) (random 5) (random 5))
-                   (state (random 3) (random 5) (random 5) (random 5))
-                   (state (random 3) (random 5) (random 5) (random 5)))))
+  (automaton (random 10)
+             (list (state (random 3) (random 10) (random 10) (random 10))
+                   (state (random 3) (random 10) (random 10) (random 10))
+                   (state (random 3) (random 10) (random 10) (random 10))
+                   (state (random 3) (random 10) (random 10) (random 10))
+                   (state (random 3) (random 10) (random 10) (random 10))
+                   (state (random 3) (random 10) (random 10) (random 10))
+                   (state (random 3) (random 10) (random 10) (random 10))
+                   (state (random 3) (random 10) (random 10) (random 10))
+                   (state (random 3) (random 10) (random 10) (random 10))
+                   (state (random 3) (random 10) (random 10) (random 10))
+                   )))
 
 (define (flatten-state a-state)
   (map (lambda (f) (f a-state))
@@ -75,6 +81,11 @@
                    (apply state (take (drop a-list 5) 4))
                    (apply state (take (drop a-list 9) 4))
                    (apply state (take (drop a-list 13) 4))
+                   (apply state (take (drop a-list 17) 4))
+                   (apply state (take (drop a-list 21) 4))
+                   (apply state (take (drop a-list 25) 4))
+                   (apply state (take (drop a-list 29) 4))
+                   (apply state (take (drop a-list 33) 4))
                    (apply state (take-right a-list 4)))))
 
 (define (state-labels automaton)
