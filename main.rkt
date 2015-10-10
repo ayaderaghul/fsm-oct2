@@ -1,3 +1,8 @@
+; #lang racket
+;(provide A
+;	create-population
+;	evolve)
+
 (require "auto.rkt"
          "fit.rkt"
          "match.rkt"
@@ -25,7 +30,7 @@
 (define demographic '())
 ;; evolve the population over cycles
 ;; N=100
-(define (evolve population cycles speed mutation rounds-per-match delta)
+(define (evolve population cycles speed mutation rounds-per-match delta name-list)
   (let* ([N (length population)]
          [round-results (match-population population rounds-per-match delta)]
          [average-payoff (exact->inexact (/ (apply + (flatten round-results))
@@ -43,12 +48,27 @@
     (set! population-mean
           (append population-mean (list average-payoff)))
     (and (< average-payoff (* 3/4 max-pay))
-         (out-rank cycles population delta))
+         (out-rank cycles population (second name-list)))
     (if (zero? cycles)
         (begin
-          (plot-mean population-mean delta)
-          (out-mean population-mean delta)
+          (plot-mean population-mean (third name-list))
+          (out-mean population-mean (first name-list))
           population)
-        (evolve new-population (sub1 cycles) speed mutation rounds-per-match delta))))
+        (evolve new-population (sub1 cycles) speed mutation rounds-per-match delta name-list))))
 
-(define B (evolve A 100 10 1 30 .2))
+
+;; run mass
+
+(define (run-one s r d)
+  (define B (create-population 100))
+  (define name-list (n->srd s r d))
+  (define B1 (evolve B 100 s 1 r d name-list))
+  (print "hi"))
+
+
+(define (run-many list-of-speeds list-of-rounds list-of-deltas)
+  (for* ([i (in-list list-of-speeds)]
+         [j (in-list list-of-rounds)]
+         [k (in-list list-of-deltas)])
+    (run-one i j k)
+    (set! population-mean (list 0))))

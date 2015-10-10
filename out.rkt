@@ -5,6 +5,7 @@
 (provide out-data
          out-mean
          out-rank
+         n->srd
          chop
          make-body
          make-labels
@@ -23,24 +24,23 @@
   (close-output-port out))
 
 
-(define (generate-mean-txt delta)
-  (string-append "simuI/simu"
-                 (string-trim (number->string (* 10 delta)) ".0")
-                 "/mean.txt"))
+(define (out-mean data mean-file)
+  (out-data mean-file (map list data)))
 
+(define (out-rank day population rank-file)
+  (out-data rank-file (append (list (list day))
+                              (map list (rank population)))))
 
-(define (generate-rank-txt delta)
-  (string-append "simuI/simu"
-                 (string-trim (number->string (* 10 delta)) ".0")
-                 "/rank.txt"))
+(define (n->srd s r d)
+  (let ([pre-name (string-append
+                   ;"R:/fsm-oct2/"
+                   "s" (number->string s) "r" (number->string r)
+                   "d" (string-trim (number->string (* 10 d)) ".0"))])
+    (list
+     (string-append pre-name "mean.txt")
+     (string-append pre-name "rank.txt")
+     (string-append pre-name "plot.png"))))
 
-
-(define (out-mean data delta)
-  (out-data (generate-mean-txt delta) (map list data)))
-
-(define (out-rank day population delta)
-  (out-data (generate-rank-txt delta) (append (list (list day))
-                           (map list (rank population)))))
 
 
 (define (chop automaton)

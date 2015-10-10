@@ -13,13 +13,13 @@
                  (string-trim (number->string (* 10 delta)) ".0")
                  "/plot.png"))
 
-(define (plot-mean data delta)
+(define (plot-mean data plot-file)
   (let* ([l (length data)]
          [coors (map list (build-list l values)
                      data)])
     (plot (lines coors)
           #:y-min 0
-	 #:out-file (generate-plot-png delta)
+	 #:out-file plot-file
           #:width 600)
     ))
 
