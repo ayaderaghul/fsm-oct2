@@ -1,10 +1,7 @@
 #lang racket
 (require "auto.rkt")
 
-(provide
- set-immutable
- mutate
- mutate-populations)
+(provide (all-defined-out))
 
 (define (set-immutable automaton posn new-value)
   (append
@@ -14,10 +11,10 @@
 
 (define (mutate an-auto)
   (let ([flatten-one (flatten-automaton an-auto)]
-        [r (random 21)]
+        [r (random 41)]
         [c (random 3)]
-	[s (random 5)])
-    (if (member r (list 1 5 9 13 17))
+	[s (random 10)])
+    (if (member r (list 1 5 9 13 17 21 25 29 33 37))
         (make-automaton (set-immutable flatten-one r c))
 	(make-automaton (set-immutable flatten-one r s))
         )))

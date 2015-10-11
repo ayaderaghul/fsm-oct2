@@ -45,7 +45,7 @@
         (shuffle (append survivors successors))]
       [define new-population
         (mutate-populations mutation before-mutation)]
-      (out-rank i new-population (second file-list))
+      (out-rank i new-population 10 (second file-list))
       (values (cons average-payoff result)
               new-population)))
   (out-mean (reverse result) (first file-list))
@@ -59,6 +59,7 @@
   (define name-list (n->srd s r d))
   (time
    (evolve B 100 s 1 r d name-list)))
+
 
 (define (run-many list-of-speeds list-of-rounds list-of-deltas)
   (for* ([i (in-list list-of-speeds)]

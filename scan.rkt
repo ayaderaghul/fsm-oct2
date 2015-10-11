@@ -1,12 +1,6 @@
 #lang racket
-(require "auto.rkt")
-(require "match.rkt")
-(provide scan-init
-	scan
-	scan-types
-        rank
-        top
-        contest)
+(require "auto.rkt" "match.rkt")
+(provide (all-defined-out))
 
 ;; SCAN
 (define (scan-init population)
