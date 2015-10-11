@@ -3,7 +3,6 @@
 
 (provide (all-defined-out))
 
-;; from the matching result, calculate the fitness
 ;; FITNESS
 ;; from matching result, calculate the fitness
 

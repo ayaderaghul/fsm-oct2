@@ -55,8 +55,8 @@
 ;; run mass
 
 (define (run-one s r d)
-  (define B (create-population 100))
-  (define name-list (n->srd s r d))
+  [define B (create-population 100)]
+  [define name-list (n->srd s r d)]
   (time
    (evolve B 100 s 1 r d name-list)))
 
