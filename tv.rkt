@@ -7,7 +7,6 @@
 
 ;; TV
 
-
 (define (generate-plot-png delta)
   (string-append "simuI/simu"
                  (string-trim (number->string (* 10 delta)) ".0")

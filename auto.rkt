@@ -1,66 +1,80 @@
 #lang racket
 
-(provide struct-out automaton
-         struct-out state
-         state-name
-         state-result0
-         state-result1
-         state-result2
-
-         automaton-states
-         automaton-current-state
-
-         generate-auto
-         jump-to-state
-         react
-         update
-         flatten-automaton
-         make-automaton
-         state-labels
-         current-claim)
+(provide (all-defined-out))
 
 ;; AUTOMATON
 (struct state (name result0 result1 result2) #:transparent)
 ;; a state: name and many transition rules
 (struct automaton (current-state states) #:transparent)
 ;; the machine itself: current state + states
+;; mutable data structure seems very hard to handle later on
 
-;; when an event happens, the right action needs to be chosen
-(define (filter-state an-auto)
-  (list-ref
-   (automaton-states an-auto)
-   (automaton-current-state an-auto)))
+(define (automaton-current-strat an-auto)
+  (state-name (list-ref
+               (automaton-states an-auto)
+               (automaton-current-state an-auto))))
 
-;; output: claim, not state
+(define (create-automaton* init-state
+                           state0 state1 state2 state3 state4
+                           state5 state6 state7 state8 state9
+                           result00 result01 result02
+                           result10 result11 result12
+                           result20 result21 result22
+                           result30 result31 result32
+                           result40 result41 result42
+                           result50 result51 result52
+                           result60 result61 result62
+                           result70 result71 result72
+                           result80 result81 result82
+                           result90 result91 result92)
+  (automaton init-state
+             (list (state state0 result00 result01 result02)
+                   (state state1 result10 result11 result12)
+                   (state state2 result20 result21 result22)
+                   (state state3 result30 result31 result32)
+                   (state state4 result40 result41 result42)
+                   (state state5 result50 result51 result52)
+                   (state state6 result60 result61 result62)
+                   (state state7 result70 result71 result72)
+                   (state state8 result80 result81 result82)
+                   (state state9 result90 result91 result92)
+                   )))
+
+(define (create-automaton)
+  (create-automaton* (random 10) ;; number 10 here is 10 states
+                     (random 3) (random 3) (random 3) (random 3) (random 3)
+                     (random 3) (random 3) (random 3) (random 3) (random 3)
+                     (random 10) (random 10) (random 10)
+                     (random 10) (random 10) (random 10)
+                     (random 10) (random 10) (random 10)
+                     (random 10) (random 10) (random 10)
+                     (random 10) (random 10) (random 10)
+                     (random 10) (random 10) (random 10)
+                     (random 10) (random 10) (random 10)
+                     (random 10) (random 10) (random 10)
+                     (random 10) (random 10) (random 10)
+                     (random 10) (random 10) (random 10)
+                                        ))
+
+
+;; AUTOMATON BEHAVIOR
 (define (jump-to-state an-event an-auto)
-  (let ([result-state (filter-state an-auto)])
-    (cond [(= an-event 0) (state-result0 result-state)]
-          [(= an-event 1) (state-result1 result-state)]
-          [(= an-event 2) (state-result2 result-state)])))
+  (define result-state (list-ref
+                        (automaton-states an-auto)
+                        (automaton-current-state an-auto)))
+  (cond [(= an-event 0) (state-result0 result-state)]
+        [(= an-event 1) (state-result1 result-state)]
+        [(= an-event 2) (state-result2 result-state)]))
 
 (define (react an-event an-auto)
-  (state-name
-   (list-ref (automaton-states an-auto)
-             (jump-to-state an-event an-auto))))
+  (define states (automaton-states an-auto))
+  (define next-state-id (jump-to-state an-event an-auto))
+  (state-name (list-ref states next-state-id)))
 
 (define (update old-auto new-state)
-  (struct-copy automaton old-auto [current-state new-state]))
+  (struct-copy automaton old-auto
+               [current-state new-state]))
 
-; generate random automaton (random current state, random result-state
-; after each event
-(define (generate-auto)
-  (automaton (random 10)
-             (list (state (random 3) (random 10) (random 10) (random 10))
-                   (state (random 3) (random 10) (random 10) (random 10))
-                   (state (random 3) (random 10) (random 10) (random 10))
-                   (state (random 3) (random 10) (random 10) (random 10))
-                   (state (random 3) (random 10) (random 10) (random 10))
-                   (state (random 3) (random 10) (random 10) (random 10))
-                   (state (random 3) (random 10) (random 10) (random 10))
-                   (state (random 3) (random 10) (random 10) (random 10))
-                   (state (random 3) (random 10) (random 10) (random 10))
-                   (state (random 3) (random 10) (random 10) (random 10))
-                   )))
 
 (define (flatten-state a-state)
   (map (lambda (f) (f a-state))
@@ -92,8 +106,3 @@
   (map (lambda (a-state)
          (state-name a-state))
        (automaton-states automaton)))
-
-(define (current-claim automaton)
-  (state-name
-   (list-ref (automaton-states automaton)
-             (automaton-current-state automaton))))
