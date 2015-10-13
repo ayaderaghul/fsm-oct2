@@ -19,7 +19,7 @@
     (plot (lines coors)
           #:y-min 0
 	 #:out-file plot-file
-          #:width 600)
+          #:width 800)
     ))
 
 (define (plot-dynamic data)
